@@ -1,90 +1,51 @@
-Этап 1. REPL
-Цель: создать минимальный прототип. Большинство функций в нем пока
-представляют собой заглушки, но диалог с пользователем уже поддерживается.
-Требования:
-1. Приложение должно быть реализовано в форме консольного интерфейса
-(CLI).
-2. Приглашение к вводу должно содержать имя VFS.
-3. Реализовать простой парсер, который разделяет ввод на команду и
-аргументы по пробелам.
-4. Реализовать команды-заглушки, которые выводят свое имя и аргументы: ls,
-cd.
-5. Реализовать команду exit.
-6. Продемонстрировать работу прототипа в интерактивном режиме.
-Необходимо показать примеры работы всей реализованной
-функциональности, включая обработку ошибок.
-7. Результат выполнения этапа сохранить в репозиторий стандартно
-оформленным коммитом.
+Stage 1: REPL (MVP)
+Objective: Build a minimal viable prototype. While most functions are initially stubs, the interactive user dialog loop is fully operational.
+Requirements:
+CLI Interface: The application must run as a Command-Line Interface.
+Custom Prompt: The input prompt must clearly feature the VFS identifier.
+Argument Parsing: Implement a basic parser that tokenizes input by whitespace into a command and its arguments.
+Stub Commands: Implement dummy ls and cd commands that simply echo their command name and received arguments.
+Termination: Implement a graceful exit command.
+Interactive Demo: Showcase the prototype in interactive mode, demonstrating all implemented functionality, including edge cases and error handling.
+Version Control: Save the result to the repository using a standardized, descriptive commit message.
 <img width="991" height="104" alt="image" src="https://github.com/user-attachments/assets/971c2b4d-0129-4e91-9e6e-64c0d51e4e8d" />
 
-
-Этап 2. Конфигурация
-Цель: сделать эмулятор настраиваемым, то есть поддержать ввод параметров
-пользователя в приложение. Организовать для этого этапа отладочный вывод всех
-заданных параметров при запуске эмулятора.
-Требования:
-1. Параметры командной строки:
-– Путь к физическому расположению VFS.
-– Путь к стартовому скрипту.
-2. Стартовый скрипт для выполнения команд эмулятора: выполняет команды
-последовательно, ошибочные строки пропускает. При выполнении скрипта
-на экране отображается как ввод, так и вывод, имитируя диалог с
-пользователем.
-3. Сообщить об ошибке во время исполнения стартового скрипта.
-4. Реализовать вывод параметров эмулятора в формате ключ-значение с
-помощью служебной команды conf-dump.
-5. Создать несколько скриптов реальной ОС, в которой выполняется эмулятор.
-Включить в каждый скрипт вызовы эмулятора для тестирования всех
-поддерживаемых параметров командной строки.
-6. Результат выполнения этапа сохранить в репозиторий стандартно
-оформленным коммитом.
+Stage 2: Configuration & Bootstrapping
+Objective: Introduce configurability via CLI arguments and implement a debug dump of all active parameters upon emulator startup.
+Requirements:
+CLI Arguments:
+--vfs-path: Path to the physical VFS storage location.
+--script-path: Path to the startup execution script.
+Startup Script Execution: Executes commands sequentially, gracefully skipping malformed lines. It echoes both input and output to the console, simulating a real interactive user session.
+Error Reporting: Clearly report any execution errors encountered while running the startup script.
+conf-dump Command: Outputs the current emulator configuration in a structured key-value format.
+Test Harness: Create native OS shell scripts that invoke the emulator to validate all supported CLI argument combinations.
+Version Control: Save the result to the repository using a standardized commit.
 <img width="521" height="342" alt="image" src="https://github.com/user-attachments/assets/2384535e-1f73-461c-826d-f4d4310049a4" />
 
-Этап 3. VFS
-Цель: подключить виртуальную файловую систему (VFS).
-Требования:
-1. Все операции должны производиться в памяти. Запрещается распаковывать
-или иным образом модифицировать данные VFS, за исключением
-возможных служебных команд.
-2. Источником VFS является JSON-файл. Для двоичных данных используется
-base64 или аналогичный формат.
-3. Создать несколько скриптов реальной ОС, в которой выполняется эмулятор.
-Включить в каждый скрипт вызовы эмулятора для тестирования работы c
-различными вариантами VFS (минимальный, несколько файлов, не менее 3
-уровней файлов и папок).
-4. Создать стартовый скрипт для тестирования всех реализованных на этом и
-прошлых этапах команд. Добавить туда примеры всех режимов команд,
-включая работу с VFS и обработку ошибок.
-5. Результат выполнения этапа сохранить в репозиторий стандартно
-оформленным коммитом.
+Stage 3: Virtual File System (VFS) Integration
+Objective: Wire up the in-memory Virtual File System.
+Requirements:
+In-Memory Operations: All file system operations must occur strictly in memory. Unpacking or physically modifying the source VFS data is prohibited (except for designated service commands).
+VFS Source Format: The VFS is sourced from a JSON file. Binary payloads must be encoded in Base64 (or an equivalent safe format).
+Topology Testing: Create OS-level test scripts to validate the emulator against various VFS structures (minimal setup, multi-file setups, and deep nesting of ≥ 3 directory levels).
+Comprehensive Test Script: Create a master startup script to test all commands implemented in this and previous stages, covering standard flows, VFS interactions, and error boundaries.
+Version Control: Save the result to the repository using a standardized commit.
 <img width="490" height="351" alt="image" src="https://github.com/user-attachments/assets/65777c00-6082-4918-952a-5486482425ce" />
 
-
-Этап 4. Основные команды
-Цель: поддержать команды, имитирующие работу в UNIX-подобной
-командной строке.
-Требования:
-1. Необходимо реализовать логику для ls и cd.
-2. Реализовать новые команды: rev, echo.
-3. Создать стартовый скрипт для тестирования всех реализованных на этом
-этапе команд. Добавить туда примеры всех режимов команд, включая
-работу с VFS и обработку ошибок.
-4. Результат выполнения этапа сохранить в репозиторий стандартно
-оформленным коммитом.
+Stage 4: Core UNIX-like Commands
+Objective: Implement foundational commands that mimic a standard UNIX-like shell environment.
+Requirements:
+Navigation & Listing: Implement full, functional logic for ls and cd.
+Utility Commands: Implement rev (string reversal) and echo.
+Comprehensive Test Script: Create a master startup script to validate all newly implemented commands, including VFS state interactions and error handling scenarios.
+Version Control: Save the result to the repository using a standardized commit.
 <img width="408" height="570" alt="image" src="https://github.com/user-attachments/assets/6aa95a92-e55d-47f3-bdc0-198b04f468ec" />
 
-
-Этап 5. Дополнительные команды
-Цель: поддержать более сложные команды, изменяющие состояние VFS, при
-этом модификации должны осуществляться только в памяти.
-Требования:
-1. Реализовать команды: rm, mkdir.
-2. Создать стартовый скрипт для тестирования всех реализованных на этом
-этапе команд. Добавить туда примеры всех режимов команд, включая
-работу с VFS и обработку ошибок.
-3. Результат выполнения этапа сохранить в репозиторий стандартно
-оформленным коммитом.
+Stage 5: State-Mutating Commands
+Objective: Support advanced commands that mutate the VFS state (with all modifications strictly confined to in-memory representation).
+Requirements:
+Mutation Commands: Implement rm (remove file/directory) and mkdir (make directory).
+Comprehensive Test Script: Create a master startup script to validate all Stage 5 commands, ensuring robust VFS state transitions, edge-case handling, and proper error reporting.
+Version Control: Save the result to the repository using a standardized commit.
 <img width="554" height="569" alt="image" src="https://github.com/user-attachments/assets/4e42f1cc-87fb-45de-ad08-cabb11106822" />
-
-
-
